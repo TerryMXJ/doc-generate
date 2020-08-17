@@ -34,7 +34,6 @@ gunicorn -b localhost:5000 run:app
 * Huanjun Xu
 * Xiujie Meng
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
