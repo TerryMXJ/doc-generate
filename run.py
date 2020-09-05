@@ -143,7 +143,7 @@ def function_predict():
     predict function of a sentence
     :return: label
     """
-    # type=1,function; type=2,directive, type=3,others
+    # type=1,function; type=2,directive, type=0,others
     if not request.json:
         return "fail"
     if 'sentence' not in request.json:
