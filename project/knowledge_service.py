@@ -2,6 +2,7 @@ from sekg.constant.code import CodeEntityRelationCategory
 from sekg.constant.constant import WikiDataConstance
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
+from script.classify_sentence import FastTextClassifier
 
 from project.extractor_module.constant.constant import RelationNameConstant, FeatureConstant, DomainConstant, \
     FunctionalityConstant, SentenceConstant, CodeConstant
@@ -21,29 +22,17 @@ class KnowledgeService:
         res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Constraint_Relation))
         return self.parse_res_list(res_list)
 
-    def get_api_functionality(self, api_id):
-        # res_list = []
-        # res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Functionality_Relation))
-        # res_list.extend(self.api_relation_search(api_id, RelationNameConstant.Functionality_Compare_Relation))
-        # res_list.extend(self.api_relation_search(api_id, RelationNameConstant.has_Behavior_Relation))
-        # return self.parse_res_list(res_list)
+    def get_func_or_directive(self, api_id):
+        functionClassifier = FastTextClassifier()
         description = self.get_method_doc_info(api_id)["comment"]
+        if description.startswith("DL Auto Generate:"):
+            description = description[description.find(":")+1:]
         if description == "":
-            return description
-        elif description.startswith("DL Auto Generate:"):
-            return description[description.find(":")+1:]
-        elif description.find(".") != -1:
-            return description[:description.find(".")]
+            type = 0
         else:
-            return description
-        # elif description.find(".") != -1 and description.find(",") != -1:
-        #     index = min(description.find("."), description.find(","))
-        #     return description[:index]
-        # elif description.find(".") != -1:
-        #     return description[:description.find(".")]
-        # else:
-        #     return description[:description.find(",")]
-
+            type = functionClassifier.predict(description)
+        result = (type, description)
+        return result
 
     def get_api_category(self, api_id):
         res_list = []
@@ -56,7 +45,7 @@ class KnowledgeService:
     def get_api_methods(self, api_id):
         res_list = []
         res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
-            CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
+           CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
         method_list = self.parse_res_list(res_list)
         for m in method_list:
             m["declare"] = self.get_declare_from_method_name(m["name"])
@@ -66,8 +55,16 @@ class KnowledgeService:
             m["exception_info"] = self.get_exception_info(m["id"])
             m["label"] = self.get_label_info(m["id"], "method")
             m["sample_code"] = self.get_one_sample_code(m["id"])
-            m["functionality"] = self.get_api_functionality(m["id"])
-            m["directive"] = ""
+            func_or_directive = self.get_func_or_directive(m["id"])
+            if func_or_directive[0] == 0:
+                m["directive"] = ""
+                m["functionality"] = ""
+            elif func_or_directive[0] == 1:
+                m["functionality"] = func_or_directive[1]
+                m["directive"] = ""
+            else:
+                m["directive"] = func_or_directive[1]
+                m["functionality"] = ""
 
         method_list.sort(key=lambda x: x['declare'])
         # 排除构造方法
@@ -279,8 +276,16 @@ class KnowledgeService:
         res["implements"] = self.api_implement_class(api_id)
         res["fields"] = self.api_field(api_id)
         res["label"] = self.get_label_info(api_id, "class")
-        res["functionality"] = self.get_api_functionality(api_id)
-        res["directive"] = ""
+        func_or_directive = self.get_func_or_directive(api_id)
+        if func_or_directive[0] == 0:
+            res["directive"] = ""
+            res["functionality"] = ""
+        elif func_or_directive[0] == 1:
+            res["functionality"] = func_or_directive[1]
+            res["directive"] = ""
+        else:
+            res["directive"] = func_or_directive[1]
+            res["functionality"] = ""
         # 假接口
         if api_id == 1207:
             # implements 信息添加

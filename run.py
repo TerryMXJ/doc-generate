@@ -7,7 +7,6 @@ from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
 from project.json_service import JsonService
 from project.utils.path_util import PathUtil
-from script.classify_sentence import FastTextClassifier
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -20,7 +19,7 @@ knowledge_service = KnowledgeService(doc_collection)
 doc_service = DocService()
 json_service = JsonService()
 
-functionClassifier = FastTextClassifier()
+
 @app.route('/')
 def hello():
     return 'success'
@@ -137,20 +136,6 @@ def get_constructor():
     res = knowledge_service.get_constructor(qualified_name)
     return jsonify(res)
 
-@app.route('/function_predict/', methods=['POST', 'GET'])
-def function_predict():
-    """
-    predict function of a sentence
-    :return: label
-    """
-    # type=1,function; type=2,directive, type=0,others
-    if not request.json:
-        return "fail"
-    if 'sentence' not in request.json:
-        return "fail"
-    query = request.json['sentence']
-    label = functionClassifier.predict(query)
-    return jsonify({"type": label})
 
 if __name__ == '__main__':
     app.run()
