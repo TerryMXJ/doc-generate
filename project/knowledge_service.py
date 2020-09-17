@@ -12,7 +12,7 @@ import re
 
 class KnowledgeService:
     def __init__(self, doc_collection):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.8")
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v2_1")
         self.graph_data: GraphData = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
 
@@ -55,6 +55,7 @@ class KnowledgeService:
             m["exception_info"] = self.get_exception_info(m["id"])
             m["label"] = self.get_label_info(m["id"], "method")
             m["sample_code"] = self.get_one_sample_code(m["id"])
+            m["concepts"] = self.get_concept(m["id"])
             func_or_directive = self.get_func_or_directive(m["id"])
             if func_or_directive[0] == 0:
                 m["directive"] = ""
@@ -73,7 +74,7 @@ class KnowledgeService:
             if m['declare'][0] < 'a':
                 count += 1
             else:
-                break;
+                break
         method_list = method_list[count:]
         return method_list
 
@@ -265,6 +266,14 @@ class KnowledgeService:
 
         return res_list
 
+    def get_concept(self, api_id):
+        out_relations = self.graph_data.get_all_out_relations(api_id)
+        concepts_list = []
+        for item in out_relations:
+            if item[1] == "has concept":
+                concepts_list.append(self.graph_data.get_node_info_dict(item[2])["properties"]["qualified_name"])
+        return concepts_list
+
     def api_base_structure(self, api_name):
         # 继承树
         api_id = self.get_api_id_by_name(api_name)
@@ -276,6 +285,7 @@ class KnowledgeService:
         res["implements"] = self.api_implement_class(api_id)
         res["fields"] = self.api_field(api_id)
         res["label"] = self.get_label_info(api_id, "class")
+        res["concepts"] = self.get_concept(api_id)
         func_or_directive = self.get_func_or_directive(api_id)
         if func_or_directive[0] == 0:
             res["directive"] = ""
