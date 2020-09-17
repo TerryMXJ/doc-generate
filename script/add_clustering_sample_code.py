@@ -42,11 +42,13 @@ def find_doc(qualified_name):
 
 # 返回api对应的语料
 def get_corpus(qualified_name):
+    simple_name: str = qualified_name[qualified_name.rfind(".")+1:]
+    print(simple_name)
     corpus = list()
     nums = api_to_mid[qualified_name]
     for num in nums:
         method: str = methods_info[num-1]
-        if method.count("\n") >= 8:
+        if method.count("\n") >= 10 and method[:method.find("(")].find(simple_name) == -1:
             corpus.append(method)
     if len(nums) <= 5 or len(corpus) <= 5:
         return None
