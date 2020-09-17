@@ -19,6 +19,8 @@ knowledge_service = KnowledgeService(doc_collection)
 doc_service = DocService()
 json_service = JsonService()
 
+print("load complete")
+
 
 @app.route('/')
 def hello():
