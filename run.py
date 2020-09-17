@@ -56,6 +56,16 @@ def api_structure():
     return jsonify(result)
 
 
+@app.route('/method_structure/', methods=["POST", "GET"])
+def method_structure():
+    if "qualified_name" not in request.json:
+        return "qualified_name need"
+    qualified_name = request.json['qualified_name']
+    api_id = knowledge_service.get_api_id_by_name(qualified_name)
+    result = knowledge_service.get_api_methods(api_id, False)
+    return jsonify(result)
+
+
 # return top5 key methods of specific class
 @app.route('/key_methods/', methods=["POST", "GET"])
 def key_methods():
