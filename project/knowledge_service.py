@@ -407,6 +407,13 @@ class KnowledgeService:
         else:
             return sample_code[0][2:]
 
+    # 返回相关api
+    def get_related_api(self, api_id):
+        result = dict()
+        result["related_api"] = ["org.jabref.model.entry.BibEntry", "org.jabref.migrations.MergeReviewIntoCommentMigration", "org.jabref.logic.importer.ParserResult.getDatabase"]
+        result["related_api_simplified"] = ["BibEntry", "MergeReviewIntoCommentMigration", "getDatabase"]
+        return result
+
 
 if __name__ == '__main__':
     pro_name = "jabref"

@@ -139,5 +139,15 @@ def get_constructor():
     return jsonify(res)
 
 
+# return related api
+@app.route('/related_api/', methods=['POST'])
+def get_related_api():
+    if 'qualified_name' not in request.json:
+        return 'qualified name need'
+    qualified_name = request.json['qualified_name']
+    res = knowledge_service.get_related_api(qualified_name)
+    return jsonify(res)
+
+
 if __name__ == '__main__':
     app.run()
