@@ -32,11 +32,10 @@ class DocService:
         if doc is None:
             return None
         result = dict()
-        sample_code = doc.get_doc_text_by_field('sample_code')
-        if sample_code is "":
-            return None
-        else:
-            result['sample_code'] = sample_code
+        sample_code = doc.get_doc_text_by_field('sample_code_cluster')
+        if sample_code is None:
+            sample_code = doc.get_doc_text_by_field("sample_code")
+        result['sample_code'] = sample_code
         return result
 
 

@@ -397,6 +397,7 @@ class KnowledgeService:
         else:
             return sample_code[0][2:]
 
+
 if __name__ == '__main__':
     pro_name = "jabref"
     data_dir = PathUtil.doc(pro_name=pro_name, version="v1.2")
