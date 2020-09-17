@@ -42,11 +42,21 @@ class KnowledgeService:
         res_list.extend(self.api_relation_search(api_id, RelationNameConstant.Ontology_Parallel_Relation))
         return self.parse_res_list(res_list)
 
-    def get_api_methods(self, api_id):
+    def get_api_methods(self, api_id, if_class=True):
         res_list = []
-        res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
-           CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
-        method_list = self.parse_res_list(res_list)
+        if if_class:
+            res_list.extend(self.api_by_relation_search(api_id, CodeEntityRelationCategory.category_code_to_str_map[
+               CodeEntityRelationCategory.RELATION_CATEGORY_BELONG_TO]))
+            method_list = self.parse_res_list(res_list)
+        else:
+            method_node = self.graph_data.get_node_info_dict(api_id)
+            t = {
+                "id": method_node["id"],
+                "name": self.get_name_of_node_by_different_label(method_node)
+            }
+            if "properties" in method_node and 'full_description' in method_node["properties"]:
+                t["full_description"] = method_node["properties"]["full_description"]
+            method_list = [t]
         for m in method_list:
             m["declare"] = self.get_declare_from_method_name(m["name"])
             m["parameters"] = self.method_parameter(m["id"])
