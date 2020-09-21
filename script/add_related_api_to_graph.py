@@ -3,6 +3,9 @@ from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 import networkx as nx
 from networkx.algorithms.similarity import simrank_similarity
 
+'''
+添加相关api
+'''
 
 pro_name = "jabref"
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.9")

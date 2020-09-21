@@ -4,6 +4,9 @@ from project.classification_module import method_classification
 from nltk.corpus import wordnet as wn
 from project.classification_module.method_classification import split
 
+'''
+对method进行分类
+'''
 
 if __name__ == '__main__':
     # 1. 得到图中所有方法节点 2. qualified_name传入classification中做判断

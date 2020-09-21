@@ -14,6 +14,9 @@ mid_to_method_info_json_path = Path(definitions.ROOT_DIR) / "output" / "json" / 
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(doc_collection_path)
 
+'''
+doc文件抽取样例代码
+'''
 
 def find_doc(qualified_name):
     node: NodeInfo = graph_data.find_one_node_by_property(property_name='qualified_name', property_value=qualified_name)

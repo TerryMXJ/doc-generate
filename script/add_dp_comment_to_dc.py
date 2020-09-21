@@ -6,6 +6,10 @@ import json
 from definitions import OUTPUT_DIR
 from pathlib import Path
 
+'''
+doc文件增加dp_comment
+'''
+
 pro_name = 'jabref'
 dc_file_location = PathUtil.doc(pro_name=pro_name, version='v1')
 graph_data_file_location = PathUtil.graph_data(pro_name=pro_name, version='v1.8')

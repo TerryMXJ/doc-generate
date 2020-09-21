@@ -3,6 +3,10 @@ from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 
 # org.jabref.model.entry.BibEntry
 
+'''
+对class进行分类
+'''
+
 pro_name = "jabref"
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.7")
 graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v1.8')

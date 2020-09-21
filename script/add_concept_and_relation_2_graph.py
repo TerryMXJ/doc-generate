@@ -19,6 +19,9 @@ from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
 from definitions import DATA_DIR
 from project.utils.path_util import PathUtil
 
+'''
+添加概念节点
+'''
 
 class Concept2Graph:
 

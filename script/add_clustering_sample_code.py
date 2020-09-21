@@ -8,6 +8,9 @@ from sklearn.cluster import KMeans
 import definitions
 import json
 
+'''
+将样例代码进行聚类划分并输出
+'''
 
 pro_name = "jabref"
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.8")

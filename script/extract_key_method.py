@@ -3,6 +3,10 @@ import networkx as nx
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 from project.utils.path_util import PathUtil
 
+'''
+抽取关键方法
+'''
+
 if __name__ == '__main__':
     pro_name = "jabref"
     graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.3")
