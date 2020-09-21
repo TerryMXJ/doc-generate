@@ -1,3 +1,4 @@
 nltk==3.4.5
 sekg==0.10.3.18
 Flask==1.1.2
+networkx==2.5
