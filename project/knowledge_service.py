@@ -8,6 +8,8 @@ from project.extractor_module.constant.constant import RelationNameConstant, Fea
     FunctionalityConstant, SentenceConstant, CodeConstant
 from project.utils.path_util import PathUtil
 import re
+import networkx as nx
+from script.add_related_api_to_graph import create_subgraph, simrank_cal
 
 
 class KnowledgeService:
@@ -17,6 +19,7 @@ class KnowledgeService:
         else:
             self.graph_data: GraphData = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
+        self.G = nx.Graph(self.graph_data.graph)
 
     def get_api_characteristic(self, api_id):
         res_list = []
@@ -444,11 +447,33 @@ class KnowledgeService:
             return sample_code[0][2:]
 
     # 返回相关api
-    def get_related_api(self, api_id):
+    def get_related_api(self, qualified_name):
         result = dict()
-        result["related_api"] = ["org.jabref.model.entry.BibEntry", "org.jabref.migrations.MergeReviewIntoCommentMigration", "org.jabref.logic.importer.ParserResult.getDatabase"]
-        result["related_api_simplified"] = ["BibEntry", "MergeReviewIntoCommentMigration", "getDatabase"]
+        api_id = self.get_api_id_by_name(qualified_name)
+        node: NodeInfo = self.graph_data.find_nodes_by_ids(api_id)[0]
+        if 'class' in node['labels']:
+            kind = 'class'
+        else:
+            kind = 'method'
+        sub_G = nx.Graph()
+        create_subgraph(self.G, sub_G, api_id, 1)
+        sim_result = simrank_cal(sub_G, api_id)
+        related_api = list()
+        related_api_simplified = list()
+        count = 0
+        for j in sim_result:
+            if j[0] == api_id: continue
+            if count > 5: break
+            temp_node: NodeInfo = self.graph_data.find_nodes_by_ids(j[0])[0]
+            if kind in temp_node["labels"] and temp_node['properties']['qualified_name'].find('.')!=-1:
+                name = temp_node['properties']['qualified_name']
+                related_api.append(name)
+                related_api_simplified.append(name[name.rfind(".")+1:])
+                count += 1
+        result['related_api'] = related_api
+        result['related_api_simplified'] = related_api_simplified
         return result
+
 
 
 if __name__ == '__main__':

@@ -77,7 +77,7 @@ class EntityService():
 
 if __name__ == '__main__':
     pro_name = "jabref"
-    data_dir = PathUtil.doc(pro_name=pro_name, version="v1.1")
+    data_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
     entity_service = EntityService(doc_collection)
     entity_service.link_all_api_entity()

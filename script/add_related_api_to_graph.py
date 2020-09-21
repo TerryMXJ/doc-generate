@@ -63,16 +63,3 @@ if __name__ == '__main__':
             print("save simrank result: " + str(result))
     graph_data.save(graph_data_save_path)
     print("构建完成")
-
-
-
-
-    # G = nx.Graph(graph_data.graph)
-    # sub_G = nx.Graph()
-    # create_subgraph(G, sub_G, 1207, 1)
-    # result = simrank_cal(sub_G, 1207)
-    # for i in result:
-    #     if i[0] == 1207: continue
-    #     node: NodeInfo = graph_data.find_nodes_by_ids(i[0])[0]
-    #     if "class" in node["labels"]:
-    #         print(i[0])
