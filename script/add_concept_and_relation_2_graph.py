@@ -100,7 +100,7 @@ class Concept2Graph:
 if __name__ == "__main__":
     concept_and_relation_path = Path(DATA_DIR) / "concept_and_relation"
     concept_2_graph = Concept2Graph(PathUtil.graph_data("jabref", "v3.8"),
-                                    PathUtil.doc(pro_name="jabref", version='v1.2'),
+                                    PathUtil.doc(pro_name="jabref", version='v3.3'),
                                     str(concept_and_relation_path / "concepts.json"),
                                     str(concept_and_relation_path / "relations.json"))
     concept_2_graph.add_concept_2_graph()
