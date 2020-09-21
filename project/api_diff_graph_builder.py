@@ -138,8 +138,8 @@ class APIDiffGraphBuilder():
 if __name__ == '__main__':
     start_time = time.asctime(time.localtime(time.time()))
     print(start_time)
-    api_diff_graph_builder = APIDiffGraphBuilder(input_graph_version="v1.4")
+    api_diff_graph_builder = APIDiffGraphBuilder(input_graph_version="v3.6")
     api_diff_graph_builder.build_simple_graph()
-    api_diff_graph_builder.graph_data.save(PathUtil.graph_data(pro_name="jabref", version="v1.5"))
+    api_diff_graph_builder.graph_data.save(PathUtil.graph_data(pro_name="jabref", version="v3.7"))
     end_time = time.asctime(time.localtime(time.time()))
     print(end_time)

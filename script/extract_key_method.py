@@ -9,8 +9,8 @@ from project.utils.path_util import PathUtil
 
 if __name__ == '__main__':
     pro_name = "jabref"
-    graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.3")
-    output_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
+    graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.3")
+    output_path = PathUtil.graph_data(pro_name=pro_name, version="v3.4")
 
     graph_data: GraphData = GraphData.load(graph_data_path)
     nx_graph = nx.Graph(graph_data.graph)

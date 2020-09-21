@@ -11,9 +11,9 @@ from project.classification_module.method_classification import split
 if __name__ == '__main__':
     # 1. 得到图中所有方法节点 2. qualified_name传入classification中做判断
     pro_name = "jabref"
-    graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.6")
+    graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.4")
     graph_data: GraphData = GraphData.load(graph_data_path)
-    graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v1.7')
+    graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v3.5')
     methods_id: set = graph_data.get_node_ids_by_label("method")
     nouns = {x.name().split('.', 1)[0] for x in wn.all_synsets('n')}
     verbs = {x.name().split('.', 1)[0] for x in wn.all_synsets('v')}

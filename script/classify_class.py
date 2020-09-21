@@ -8,8 +8,8 @@ from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 '''
 
 pro_name = "jabref"
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.7")
-graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v1.8')
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.5")
+graph_data_output_path = PathUtil.graph_data(pro_name=pro_name, version='v3.6')
 graph_data: GraphData = GraphData.load(graph_data_path)
 
 def list_method_info(qualified_name: str):

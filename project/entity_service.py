@@ -10,7 +10,7 @@ import json
 
 class EntityService():
     def __init__(self, doc_collection):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v1.5")
+        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v3.7")
         self.graph_data = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
         self.entity_words = set()
@@ -81,5 +81,5 @@ if __name__ == '__main__':
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
     entity_service = EntityService(doc_collection)
     entity_service.link_all_api_entity()
-    entity_service.save_graph(str(PathUtil.graph_data(pro_name="jabref", version="v1.6")))
+    entity_service.save_graph(str(PathUtil.graph_data(pro_name="jabref", version="v3.8")))
     print("counter:" + str(entity_service.counter))

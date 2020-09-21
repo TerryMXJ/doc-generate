@@ -10,7 +10,7 @@ from project.utils.path_util import PathUtil
 from nltk.corpus import wordnet as wn
 
 pro_name = "jabref"
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.4")
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.4")
 graph_data: GraphData = GraphData.load(graph_data_path)
 
 accessor_key_word = ("get", "toString", "find", "search", "test", "contains", "is", "has", "show")
