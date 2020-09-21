@@ -8,8 +8,8 @@ from networkx.algorithms.similarity import simrank_similarity
 '''
 
 pro_name = "jabref"
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.9")
-graph_data_save_path = PathUtil.graph_data(pro_name=pro_name, version="v1.10")
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.9")
+graph_data_save_path = PathUtil.graph_data(pro_name=pro_name, version="v3.10")
 
 graph_data: GraphData = GraphData.load(graph_data_path)
 
