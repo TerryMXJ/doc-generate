@@ -11,9 +11,9 @@ doc文件增加dp_comment
 '''
 
 pro_name = 'jabref'
-dc_file_location = PathUtil.doc(pro_name=pro_name, version='v1')
-graph_data_file_location = PathUtil.graph_data(pro_name=pro_name, version='v1.8')
-dc_file_destination = PathUtil.doc(pro_name=pro_name, version='v1.1')
+dc_file_location = PathUtil.doc(pro_name=pro_name, version='v3')
+graph_data_file_location = PathUtil.graph_data(pro_name=pro_name, version='v3.9')
+dc_file_destination = PathUtil.doc(pro_name=pro_name, version='v3.1')
 comment_json_file = Path(OUTPUT_DIR) / "json" / "mid_2_dp_comment.json"
 qualified_name_json_file = Path(OUTPUT_DIR) / "json" / "mid_2_qualified_name.json"
 

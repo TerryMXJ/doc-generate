@@ -6,9 +6,9 @@ import definitions
 from pathlib import Path
 
 pro_name = 'jabref'
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version='v1.8')
-doc_collection_path = PathUtil.doc(pro_name=pro_name, version='v1.1')
-doc_collection_save_path = PathUtil.doc(pro_name=pro_name, version='v1.2')
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version='v3.9')
+doc_collection_path = PathUtil.doc(pro_name=pro_name, version='v3.1')
+doc_collection_save_path = PathUtil.doc(pro_name=pro_name, version='v3.2')
 api_to_example_json_path = Path(definitions.ROOT_DIR) / "output" / "json" / "api_2_example_sorted.json"
 mid_to_method_info_json_path = Path(definitions.ROOT_DIR) / "output" / "json" / "mid_2_method_info_without_comment.json"
 graph_data: GraphData = GraphData.load(graph_data_path)
