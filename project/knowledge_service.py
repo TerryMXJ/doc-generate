@@ -11,9 +11,11 @@ import re
 
 
 class KnowledgeService:
-    def __init__(self, doc_collection):
-        graph_data_path = PathUtil.graph_data(pro_name="jabref", version="v2_1")
-        self.graph_data: GraphData = GraphData.load(graph_data_path)
+    def __init__(self, doc_collection, graph_data_path=PathUtil.graph_data(pro_name="jabref", version="v2_1")):
+        if isinstance(graph_data_path, GraphData):
+            self.graph_data: GraphData = graph_data_path
+        else:
+            self.graph_data: GraphData = GraphData.load(graph_data_path)
         self.doc_collection = doc_collection
 
     def get_api_characteristic(self, api_id):

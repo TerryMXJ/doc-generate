@@ -11,11 +11,11 @@ from project.utils.path_util import PathUtil
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 pro_name = "jabref"
-data_dir = PathUtil.doc(pro_name=pro_name, version="v2")
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v2_1")
+data_dir = PathUtil.doc(pro_name=pro_name, version="v1.2")
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v1.9")
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
-knowledge_service = KnowledgeService(doc_collection)
+knowledge_service = KnowledgeService(doc_collection, graph_data)
 doc_service = DocService()
 json_service = JsonService()
 

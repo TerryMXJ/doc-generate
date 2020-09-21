@@ -96,11 +96,11 @@ class Concept2Graph:
 
 if __name__ == "__main__":
     concept_and_relation_path = Path(DATA_DIR) / "concept_and_relation"
-    concept_2_graph = Concept2Graph(PathUtil.graph_data("jabref", "v2"),
-                                    PathUtil.doc(pro_name="jabref", version='v2'),
+    concept_2_graph = Concept2Graph(PathUtil.graph_data("jabref", "v1.8"),
+                                    PathUtil.doc(pro_name="jabref", version='v1.2'),
                                     str(concept_and_relation_path / "concepts.json"),
                                     str(concept_and_relation_path / "relations.json"))
     concept_2_graph.add_concept_2_graph()
     concept_2_graph.add_relation_2_graph()
-    concept_2_graph.graph.save(PathUtil.graph_data("jabref", "v2_1"))
+    concept_2_graph.graph.save(PathUtil.graph_data("jabref", "v1.9"))
     print("图导入完成")
