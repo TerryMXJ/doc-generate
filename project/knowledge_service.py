@@ -1,3 +1,5 @@
+import functools
+
 from sekg.constant.code import CodeEntityRelationCategory
 from sekg.constant.constant import WikiDataConstance
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
@@ -447,6 +449,7 @@ class KnowledgeService:
             return sample_code[0][2:]
 
     # 返回相关api
+    @functools.lru_cache(maxsize=1024)
     def get_related_api(self, qualified_name):
         result = dict()
         api_id = self.get_api_id_by_name(qualified_name)
@@ -473,7 +476,6 @@ class KnowledgeService:
         result['related_api'] = related_api
         result['related_api_simplified'] = related_api_simplified
         return result
-
 
 
 if __name__ == '__main__':

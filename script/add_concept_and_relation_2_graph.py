@@ -23,6 +23,7 @@ from project.utils.path_util import PathUtil
 添加概念节点
 '''
 
+
 class Concept2Graph:
 
     def __init__(self, graph_data_path, dc_file_location, concepts_path, relations_path):
