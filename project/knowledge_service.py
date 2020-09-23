@@ -330,6 +330,7 @@ class KnowledgeService:
 
     def api_implement_class(self, api_id):
         get_api_implement_class_list = self.get_api_implement_class(api_id)
+
         return get_api_implement_class_list
 
     def api_field(self, api_id):
@@ -366,6 +367,7 @@ class KnowledgeService:
         res["directive"] = fun_dir["directive_str"]
         res["functionality_list"] = fun_dir["functionality_list"]
         res["directive_list"] = fun_dir["directive_list"]
+
         return res
 
     def get_api_methods_id(self, api_name):
@@ -497,4 +499,10 @@ if __name__ == '__main__':
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
-    knowledge_service.get_key_methods("org.jabref.model.entry.BibEntry")
+    # (1207, 'extends', 37665)
+    node: NodeInfo = knowledge_service.graph_data.find_one_node_by_property(property_name="qualified_name", property_value="Set<BibField>")
+    # 47563, 46070
+    print(knowledge_service.graph_data.get_all_in_relations(47563))
+    print(knowledge_service.graph_data.get_all_out_relations(47563))
+    print(knowledge_service.graph_data.get_all_in_relations(46070))
+    print(knowledge_service.graph_data.get_all_out_relations(46070))

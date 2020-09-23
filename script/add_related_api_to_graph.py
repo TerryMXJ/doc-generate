@@ -12,13 +12,23 @@ graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.9")
 graph_data_save_path = PathUtil.graph_data(pro_name=pro_name, version="v3.10")
 
 graph_data: GraphData = GraphData.load(graph_data_path)
+exclude_list = ["has return code directive", "has exception code directive", "has concept", "has terminology"]
 
 def create_subgraph(G, sub_G, start_point, step):
     if step > 2:
         return
-    for n in G[start_point]:
-        sub_G.add_edge(start_point, n)
-        create_subgraph(G, sub_G, n, step+1)
+    in_relations = graph_data.get_all_in_relations(start_point)
+    out_relations = graph_data.get_all_out_relations(start_point)
+    node_list = list()
+    for i in in_relations:
+        if i[1] not in exclude_list:
+            node_list.append(i[0])
+    for i in out_relations:
+        if i[1] not in exclude_list:
+            node_list.append(i[2])
+    for i in node_list:
+        sub_G.add_edge(start_point, i)
+        create_subgraph(G, sub_G, i, step+1)
 
 
 def simrank_cal(sub_G, sp):
