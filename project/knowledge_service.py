@@ -394,7 +394,6 @@ class KnowledgeService:
             temp['sample_code'] = self.get_one_sample_code(api_id=self.get_api_id_by_name(i[0]))
             count += 1
             res_list.append(temp)
-        print(res_list)
         return res_list
 
 
