@@ -1,3 +1,5 @@
+import functools
+
 from sekg.constant.code import CodeEntityRelationCategory
 from sekg.constant.constant import WikiDataConstance
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
@@ -36,6 +38,17 @@ class KnowledgeService:
         res_list.extend(self.api_relation_search(api_id, RelationNameConstant.Ontology_Parallel_Relation))
         return self.parse_res_list(res_list)
 
+    @staticmethod
+    def split_and_sort_directive(directive_list: list):
+        new_directive_set = set()
+        for item in directive_list:
+            for sentence_item in item.split(". "):
+                for atomic_directive in sentence_item.split(" || "):
+                    new_directive_set.add(atomic_directive)
+        new_directive_list = list(new_directive_set)
+        new_directive_list.sort(key=lambda directive: len(directive))
+        return new_directive_list
+
     def get_return_value_directive(self, api_id):
         out_relations = self.graph_data.get_all_out_relations(api_id)
         in_relations = self.graph_data.get_all_in_relations(api_id)
@@ -45,7 +58,7 @@ class KnowledgeService:
             if relation == "has return code directive":
                 return_value_directive_id_set.add(end if start == api_id else start)
         return_value_directive_list = [self.graph_data.get_node_info_dict(item)["properties"]["description"] for item in return_value_directive_id_set]
-        return return_value_directive_list
+        return self.split_and_sort_directive(return_value_directive_list)
 
     def get_throws_directive(self, api_id):
         out_relations = self.graph_data.get_all_out_relations(api_id)
@@ -56,7 +69,7 @@ class KnowledgeService:
             if relation == "has exception code directive":
                 throws_directive_id_set.add(end if start == api_id else start)
         throws_directive_list = [self.graph_data.get_node_info_dict(item)["properties"]["short_description"] for item in throws_directive_id_set]
-        return throws_directive_list
+        return self.split_and_sort_directive(throws_directive_list)
 
     def get_api_methods(self, api_id, if_class=True):
         res_list = []
@@ -435,6 +448,7 @@ class KnowledgeService:
             return sample_code[0][2:]
 
     # 返回相关api
+    @functools.lru_cache(maxsize=1024)
     def get_related_api(self, qualified_name):
         result = dict()
         api_id = self.get_api_id_by_name(qualified_name)
@@ -461,7 +475,6 @@ class KnowledgeService:
         result['related_api'] = related_api
         result['related_api_simplified'] = related_api_simplified
         return result
-
 
 
 if __name__ == '__main__':
