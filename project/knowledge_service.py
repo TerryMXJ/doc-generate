@@ -306,7 +306,11 @@ class KnowledgeService:
         if api_id == -1:
             knowledge["message"] = "can't find api by name"
             return knowledge
-        knowledge["characteristic"] = self.get_api_characteristic(api_id)
+        # characteristic假接口
+        if api_id == 1207:
+            knowledge["characteristic"] = "cloneable"
+        else:
+            knowledge["characteristic"] = self.get_api_characteristic(api_id)
         knowledge["category"] = self.get_api_category(api_id)
         return knowledge
 
@@ -364,24 +368,35 @@ class KnowledgeService:
         res["directive_list"] = fun_dir["directive_list"]
         return res
 
+    def get_api_methods_id(self, api_name):
+        api_id = self.get_api_id_by_name(api_name)
+        methods_list = []
+        for i in self.graph_data.get_all_in_relations(api_id):
+            if "belong to" == i[1]:
+                methods_list.append(i[0])
+        return methods_list
+
     # 返回类下面5个最关键方法
     def get_key_methods(self, api_name):
-        methods = self.api_contains_method(api_name)
-        methods_list = []
-        res = []
-        for i in range(len(methods)):
-            method_name = methods[i]["name"]
-            methods_list.append(method_name)
-        methods_list.sort(key=lambda x: x[1], reverse=True)
-        methods_list = methods_list[:5]
+        method_id_list = self.get_api_methods_id(api_name)
+        res_list = list()
+        unsorted_list = list()
+        for i in method_id_list:
+            node: NodeInfo = self.graph_data.find_nodes_by_ids(i)[0]
+            unsorted_list.append((node['properties']['qualified_name'], node['properties']['pr_value']))
+        unsorted_list.sort(key=lambda x: x[1], reverse=True)
+        count = 0
+        for i in unsorted_list:
+            if count > 4:
+                break;
+            temp = dict()
+            temp['qualified_name'] = i[0]
+            temp['sample_code'] = self.get_one_sample_code(api_id=self.get_api_id_by_name(i[0]))
+            count += 1
+            res_list.append(temp)
+        print(res_list)
+        return res_list
 
-        for i in methods_list:
-            info = dict()
-            api_id = self.get_api_id_by_name(i)
-            info["qualified_name"] = i
-            info["sample_code"] = self.get_one_sample_code(api_id)
-            res.append(info)
-        return res
 
     # 返回该类的构造方法信息
     def get_constructor(self, api_name):
@@ -483,5 +498,4 @@ if __name__ == '__main__':
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
-    knowledge_service.classify_directive_and_functionality(1207)
-    # print(knowledge_service.get_method_doc_info(1207)['comment'])
+    knowledge_service.get_key_methods("org.jabref.model.entry.BibEntry")
