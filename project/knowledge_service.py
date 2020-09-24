@@ -308,7 +308,12 @@ class KnowledgeService:
             return knowledge
         # characteristic假接口
         if api_id == 1207:
-            knowledge["characteristic"] = "cloneable"
+            res = list()
+
+            knowledge["characteristic"] = [{
+                "name": "cloneable",
+                "relation": ""
+            }]
         else:
             knowledge["characteristic"] = self.get_api_characteristic(api_id)
         knowledge["category"] = self.get_api_category(api_id)
