@@ -57,7 +57,7 @@ if __name__ == '__main__':
                 if j[0] == i: continue
                 if count > 5: break
                 node: NodeInfo = graph_data.find_nodes_by_ids(j[0])[0]
-                if kind in node["labels"]:
+                if kind in node["labels"] and node['properties']['qualified_name'].find('.') != -1:
                     result.append(node['properties']['qualified_name'])
                     count += 1
             origin_node['properties']['simrank'] = result
