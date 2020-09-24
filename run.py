@@ -12,7 +12,7 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 pro_name = "jabref"
 data_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
-graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.9")
+graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.10")
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 knowledge_service = KnowledgeService(doc_collection, graph_data)

@@ -15,7 +15,7 @@ from script.add_related_api_to_graph import create_subgraph, simrank_cal
 
 
 class KnowledgeService:
-    def __init__(self, doc_collection, graph_data_path=PathUtil.graph_data(pro_name="jabref", version="v3.9")):
+    def __init__(self, doc_collection, graph_data_path=PathUtil.graph_data(pro_name="jabref", version="v3.10")):
         if isinstance(graph_data_path, GraphData):
             self.graph_data: GraphData = graph_data_path
         else:
@@ -464,30 +464,15 @@ class KnowledgeService:
             return sample_code[0][2:]
 
     # 返回相关api
-    @functools.lru_cache(maxsize=1024)
     def get_related_api(self, qualified_name):
         result = dict()
         api_id = self.get_api_id_by_name(qualified_name)
         node: NodeInfo = self.graph_data.find_nodes_by_ids(api_id)[0]
-        if 'class' in node['labels']:
-            kind = 'class'
-        else:
-            kind = 'method'
-        sub_G = nx.Graph()
-        create_subgraph(self.G, sub_G, api_id, 1)
-        sim_result = simrank_cal(sub_G, api_id)
         related_api = list()
         related_api_simplified = list()
-        count = 0
-        for j in sim_result:
-            if j[0] == api_id: continue
-            if count > 5: break
-            temp_node: NodeInfo = self.graph_data.find_nodes_by_ids(j[0])[0]
-            if kind in temp_node["labels"] and temp_node['properties']['qualified_name'].find('.')!=-1:
-                name = temp_node['properties']['qualified_name']
-                related_api.append(name)
-                related_api_simplified.append(name[name.rfind(".")+1:])
-                count += 1
+        related_api = node['properties']['simrank']
+        for i in related_api:
+            related_api_simplified.append(i[i.rfind('.')+1:])
         result['related_api'] = related_api
         result['related_api_simplified'] = related_api_simplified
         return result
@@ -495,14 +480,8 @@ class KnowledgeService:
 
 if __name__ == '__main__':
     pro_name = "jabref"
-    data_dir = PathUtil.doc(pro_name=pro_name, version="v1.2")
+    data_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
     doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
 
     knowledge_service = KnowledgeService(doc_collection)
-    # (1207, 'extends', 37665)
-    node: NodeInfo = knowledge_service.graph_data.find_one_node_by_property(property_name="qualified_name", property_value="Set<BibField>")
-    # 47563, 46070
-    print(knowledge_service.graph_data.get_all_in_relations(47563))
-    print(knowledge_service.graph_data.get_all_out_relations(47563))
-    print(knowledge_service.graph_data.get_all_in_relations(46070))
-    print(knowledge_service.graph_data.get_all_out_relations(46070))
+    print(knowledge_service.get_related_api("org.jabref.model.entry.BibEntry"))
