@@ -1,30 +1,42 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from sekg.ir.doc.wrapper import MultiFieldDocumentCollection, MultiFieldDocument
+from sekg.ir.doc.wrapper import MultiFieldDocumentCollection
 from sekg.graph.exporter.graph_data import GraphData, NodeInfo
 
 from project.knowledge_service import KnowledgeService
 from project.doc_service import DocService
 from project.json_service import JsonService
 from project.utils.path_util import PathUtil
+from pathlib import Path
+import definitions
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
 pro_name = "jabref"
-data_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
+doc_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.10")
 graph_data: GraphData = GraphData.load(graph_data_path)
-doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(data_dir)
+doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(doc_dir)
+simple_name_map_path = Path(definitions.ROOT_DIR) / "output" / "simple_name_map.txt"
+
 knowledge_service = KnowledgeService(doc_collection, graph_data)
 doc_service = DocService()
 json_service = JsonService()
-
+with open(simple_name_map_path, 'r') as f:
+    content = f.read()
+simple_name_map = eval(content)
 print("load complete")
 
+def test_api(qualified_name):
+    if qualified_name in simple_name_map:
+        return simple_name_map[qualified_name]
+    else:
+        raise BaseException
 
 @app.route('/')
 def hello():
-    return 'success'
+    return 'connect success'
 
 
 # search doc info according to method name
@@ -32,7 +44,7 @@ def hello():
 def doc_info():
     if "qualified_name" not in request.json:
         return "qualified name need"
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     node = graph_data.find_one_node_by_property(property_name="qualified_name", property_value=qualified_name)
     result = doc_service.get_doc_info(node['id'])
     return jsonify(result)
@@ -42,7 +54,7 @@ def doc_info():
 def api_knowledge():
     if "qualified_name" not in request.json:
         return "qualified_name need"
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     result = knowledge_service.get_knowledge(qualified_name)
     return jsonify(result)
 
@@ -51,7 +63,7 @@ def api_knowledge():
 def api_structure():
     if "qualified_name" not in request.json:
         return "qualified_name need"
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     result = knowledge_service.api_base_structure(qualified_name)
     return jsonify(result)
 
@@ -60,7 +72,7 @@ def api_structure():
 def method_structure():
     if "qualified_name" not in request.json:
         return "qualified_name need"
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     api_id = knowledge_service.get_api_id_by_name(qualified_name)
     result = knowledge_service.get_api_methods(api_id, False)
     return jsonify(result)
@@ -71,7 +83,7 @@ def method_structure():
 def key_methods():
     if "qualified_name" not in request.json:
         return "qualified_name need"
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     res = knowledge_service.get_key_methods(qualified_name)
     return jsonify(res)
 
@@ -80,7 +92,7 @@ def key_methods():
 def api_terminologies():
     if "qualified_name" not in request.json:
         return "qualified_name need"
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     terminology_list = knowledge_service.get_api_terminologies(qualified_name)
     return jsonify(terminology_list)
 
@@ -90,7 +102,7 @@ def api_terminologies():
 def sample_code():
     if 'qualified_name' not in request.json:
         return 'qualified name need'
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     api_id = knowledge_service.get_api_id_by_name(qualified_name)
     if api_id is -1:
         return 'wrong qualified name'
@@ -106,7 +118,7 @@ def sample_code():
 def parameter_return_value():
     if 'qualified_name' not in request.json:
         return 'qualified name need'
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     as_parameter_list = json_service.api_as_parameter(qualified_name)
     as_return_value_list = json_service.api_as_return_value(qualified_name)
 
@@ -144,7 +156,7 @@ def parameter_return_value():
 def get_constructor():
     if 'qualified_name' not in request.json:
         return 'qualified name need'
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     res = knowledge_service.get_constructor(qualified_name)
     return jsonify(res)
 
@@ -154,7 +166,7 @@ def get_constructor():
 def get_related_api():
     if 'qualified_name' not in request.json:
         return 'qualified name need'
-    qualified_name = request.json['qualified_name']
+    qualified_name = test_api(request.json['qualified_name'])
     res = knowledge_service.get_related_api(qualified_name)
     return jsonify(res)
 

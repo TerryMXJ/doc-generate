@@ -11,7 +11,6 @@ from project.extractor_module.constant.constant import RelationNameConstant, Fea
 from project.utils.path_util import PathUtil
 import re
 import networkx as nx
-from script.add_related_api_to_graph import create_subgraph, simrank_cal
 
 
 class KnowledgeService:
