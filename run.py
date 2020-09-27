@@ -9,6 +9,7 @@ from project.json_service import JsonService
 from project.utils.path_util import PathUtil
 from pathlib import Path
 import definitions
+import json
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -18,14 +19,14 @@ doc_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.10")
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(doc_dir)
-simple_name_map_path = Path(definitions.ROOT_DIR) / "output" / "simple_name_map.txt"
+simple_name_map_path = Path(definitions.ROOT_DIR) / "output" / "simple_qualified_name_map.json"
 
 knowledge_service = KnowledgeService(doc_collection, graph_data)
 doc_service = DocService()
 json_service = JsonService()
 with open(simple_name_map_path, 'r') as f:
-    content = f.read()
-simple_name_map = eval(content)
+    json_str = f.read()
+simple_name_map = json.loads(json_str)
 print("load complete")
 
 def test_api(qualified_name):
