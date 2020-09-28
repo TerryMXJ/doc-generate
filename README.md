@@ -1,7 +1,8 @@
-# Document Generator
+# OpenAPIDocGen2 Backend
 [![DOI](https://zenodo.org/badge/275757098.svg)](https://zenodo.org/badge/latestdoi/275757098)
 
-This is a document generator backend which built by Flask. The goal is to build an automated system that can create on-demand developer documentation for a Java class.
+This is backend source code of OpenAPIDocGen2 . OpenAPIDocGen2 is a tool that generates on-demand class documentation based source code and documentation analysis. For a given class, OpenAPI- DocGen2 generates a combined documentation for it, which includes functionality descriptions, directives, domain concepts, usage examples, class/method roles, key methods, relevant classes/methods, characteristics and concepts classification, and usage scenarios.
+This Project has been accepted to the ICSME 2020 DocGen2 Tool Demo track.
 
 ## Getting Started
 
@@ -14,6 +15,7 @@ sekg==0.10.3.18
 Flask==1.1.2
 gunicorn==20.0.4
 flask_cors==3.0.8
+networkx==2.5
 ```
 
 ## Running the Service
@@ -24,15 +26,15 @@ You can simply typing the following command to start the service on server or lo
 gunicorn -b localhost:5000 run:app
 ```
 
-## Authors
+## Contributor
 
 * Mingwei Liu
-* Yang Liu
-* Shuangshuang Xing
-* Gang Lv
-* Jiazhan Xie
-* Huanjun Xu
 * Xiujie Meng
+* Huanjun Xu
+* Shuangshuang Xing
+* Xin Wang
+* Yang Liu
+* Gang Lv
 
 
 ## License

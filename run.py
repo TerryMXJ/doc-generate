@@ -19,21 +19,16 @@ doc_dir = PathUtil.doc(pro_name=pro_name, version="v3.3")
 graph_data_path = PathUtil.graph_data(pro_name=pro_name, version="v3.10")
 graph_data: GraphData = GraphData.load(graph_data_path)
 doc_collection: MultiFieldDocumentCollection = MultiFieldDocumentCollection.load(doc_dir)
-simple_name_map_path = Path(definitions.ROOT_DIR) / "output" / "simple_qualified_name_map.json"
+simple_qualified_name_map_path = Path(definitions.ROOT_DIR) / "output" / "simple_qualified_name_map.json"
 
 knowledge_service = KnowledgeService(doc_collection, graph_data)
 doc_service = DocService()
 json_service = JsonService()
-with open(simple_name_map_path, 'r') as f:
+with open(simple_qualified_name_map_path, 'r') as f:
     json_str = f.read()
-simple_name_map = json.loads(json_str)
+simple_qualified_name_map = json.loads(json_str)
 print("load complete")
 
-def test_api(qualified_name):
-    if qualified_name in simple_name_map:
-        return simple_name_map[qualified_name]
-    else:
-        raise BaseException
 
 @app.route('/')
 def hello():
@@ -170,6 +165,13 @@ def get_related_api():
     qualified_name = test_api(request.json['qualified_name'])
     res = knowledge_service.get_related_api(qualified_name)
     return jsonify(res)
+
+
+def test_api(qualified_name):
+    if qualified_name in simple_qualified_name_map:
+        return simple_qualified_name_map[qualified_name]
+    else:
+        return "Do Not Find API"
 
 
 if __name__ == '__main__':
