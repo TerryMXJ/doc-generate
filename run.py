@@ -158,7 +158,7 @@ def get_constructor():
 
 
 # return related api
-@app.route('/related_api/', methods=['POST'])
+@app.route('/related_api/', methods=['POST', 'GET'])
 def get_related_api():
     if 'qualified_name' not in request.json:
         return 'qualified name need'
@@ -168,10 +168,13 @@ def get_related_api():
 
 
 def test_api(qualified_name):
-    if qualified_name in simple_qualified_name_map:
-        return simple_qualified_name_map[qualified_name]
+    if qualified_name.find("(") != -1:
+        return qualified_name
     else:
-        return "Do Not Find API"
+        if qualified_name in simple_qualified_name_map:
+            return simple_qualified_name_map[qualified_name]
+        else:
+            return "Do Not Find API"
 
 
 if __name__ == '__main__':
