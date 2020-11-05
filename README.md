@@ -26,7 +26,7 @@ You can simply typing the following command to start the service on server or lo
 gunicorn -b localhost:5000 run:app
 ```
 
-## Contributor
+## Contributors
 
 * Mingwei Liu
 * Xiujie Meng
